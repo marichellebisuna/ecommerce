@@ -26,7 +26,7 @@ const RegisterComplete = ({ history }) => {
       if (result.user.emailVerified) {
         //remove user email from local storage
         window.localStorage.removeItem('emailForRegistration');
-        //get user id token
+        //get user id token using firebase functions
         let user = auth.currentUser;
         await user.updatePassword(password);
         const idTokenResult = await user.getIdTokenResult();
