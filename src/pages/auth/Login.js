@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { auth, googleAuthProvider } from '../../firebase';
+import { auth, googleAuthProvider, facebookAuthProvider } from '../../firebase';
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
-import { MailOutlined, GoogleOutlined } from '@ant-design/icons';
+import {
+  MailOutlined,
+  GoogleOutlined,
+  FacebookOutlined,
+} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
 const Login = ({ history }) => {
@@ -54,6 +58,26 @@ const Login = ({ history }) => {
         toast.error(err.message);
       });
   };
+  const facebookLogin = async () => {
+    auth
+      .signInWithPopup(facebookAuthProvider)
+      .then(async (result) => {
+        const { user } = result;
+        const idTokenResult = await user.getIdToken();
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            email: user.email,
+            token: idTokenResult,
+          },
+        });
+        history.push('/');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message);
+      });
+  };
   const loginForm = () => (
     <form onSubmit={handleSubmit}>
       <div className='form-group'>
@@ -75,18 +99,19 @@ const Login = ({ history }) => {
           placeholder='Your password'
         />
       </div>
-
-      <Button
-        type='primary'
-        shape='round'
-        icon={<MailOutlined />}
-        onClick={handleSubmit}
-        block
-        size='large'
-        disabled={!email || password.length < 6}
-      >
-        Login with Email/Password
-      </Button>
+      <div className='mb-1'>
+        <Button
+          type='success'
+          shape='round'
+          icon={<MailOutlined />}
+          onClick={handleSubmit}
+          block
+          size='large'
+          disabled={!email || password.length < 6}
+        >
+          Login with Email/Password
+        </Button>
+      </div>
     </form>
   );
   return (
@@ -99,18 +124,34 @@ const Login = ({ history }) => {
             <h4>Login</h4>
           )}
           {loginForm()}
-          <br />
-          <Button
-            type='danger'
-            shape='round'
-            icon={<GoogleOutlined />}
-            onClick={googleLogin}
-            block
-            size='large'
-            disabled={!email || password.length < 6}
-          >
-            Login with Google
-          </Button>
+
+          <div className='mb-1'>
+            <Button
+              type='danger'
+              shape='round'
+              icon={<GoogleOutlined />}
+              onClick={googleLogin}
+              block
+              size='large'
+              disabled={!email || password.length < 6}
+            >
+              Login with Google
+            </Button>
+          </div>
+          <div className='mb-1'>
+            {' '}
+            <Button
+              type='primary'
+              shape='round'
+              icon={<FacebookOutlined />}
+              onClick={facebookLogin}
+              block
+              size='large'
+              disabled={!email || password.length < 6}
+            >
+              Login with Facebook
+            </Button>
+          </div>
         </div>
       </div>
     </div>
