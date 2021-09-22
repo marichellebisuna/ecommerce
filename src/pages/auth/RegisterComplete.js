@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../../firebase';
 import { toast } from 'react-toastify';
+import { Button } from 'antd';
+import { MailOutlined } from '@ant-design/icons';
 
 const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState('');
@@ -59,9 +61,19 @@ const RegisterComplete = ({ history }) => {
         onChange={(e) => setPassword(e.target.value)}
         autoFocus
       />
-      <button type='submit' className='btn'>
+
+      <Button
+        type='primary'
+        shape='round'
+        icon={<MailOutlined />}
+        onClick={handleSubmit}
+        block
+        size='large'
+        size='large'
+        disabled={!email || password.length < 6}
+      >
         Complete Registration
-      </button>
+      </Button>
     </form>
   );
   return (
