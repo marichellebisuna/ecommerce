@@ -14,6 +14,7 @@ import {
   GithubOutlined,
 } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState('marichellebisuna@yahoo.com');
@@ -192,6 +193,11 @@ const Login = ({ history }) => {
             >
               Login with Github
             </Button>
+          </div>
+          <div className='m-2'>
+            <Link to='/forgot_password' className='float-right text-danger'>
+              Forgot Password
+            </Link>
           </div>
         </div>
       </div>
