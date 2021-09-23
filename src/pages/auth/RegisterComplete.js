@@ -3,10 +3,17 @@ import { auth } from '../../firebase';
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import { MailOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 
 const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) history.push('/');
+  }, [user]);
+
   useEffect(() => {
     setEmail(window.localStorage.getItem('emailForRegistration'));
   }, []);

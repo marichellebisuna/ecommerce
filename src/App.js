@@ -41,7 +41,7 @@ function App() {
         <Route exact path='/login' component={Login} />
         <Route exact path='/register' component={Register} />
         <Route exact path='/register/complete' component={RegisterComplete} />
-        <Route exact path='/forgot_password' component={ForgotPassword} />
+        <Route exact path='/forgot/password' component={ForgotPassword} />
       </Switch>
     </>
   );

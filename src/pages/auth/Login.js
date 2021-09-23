@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   auth,
   googleAuthProvider,
@@ -15,11 +15,17 @@ import {
 } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState('marichellebisuna@yahoo.com');
   const [password, setPassword] = useState('123456');
   const [loading, setLoading] = useState(false);
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) history.push('/');
+  }, [user]);
 
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
@@ -195,7 +201,7 @@ const Login = ({ history }) => {
             </Button>
           </div>
           <div className='m-2'>
-            <Link to='/forgot_password' className='float-right text-danger'>
+            <Link to='/forgot/password' className='float-right text-danger'>
               Forgot Password
             </Link>
           </div>
