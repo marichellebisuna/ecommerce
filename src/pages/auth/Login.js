@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { auth, googleAuthProvider, facebookAuthProvider } from '../../firebase';
+import {
+  auth,
+  googleAuthProvider,
+  facebookAuthProvider,
+  githubAuthProvider,
+} from '../../firebase';
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import {
   MailOutlined,
   GoogleOutlined,
   FacebookOutlined,
+  GithubOutlined,
 } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
@@ -41,6 +47,26 @@ const Login = ({ history }) => {
   const googleLogin = async () => {
     auth
       .signInWithPopup(googleAuthProvider)
+      .then(async (result) => {
+        const { user } = result;
+        const idTokenResult = await user.getIdToken();
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            email: user.email,
+            token: idTokenResult,
+          },
+        });
+        history.push('/');
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message);
+      });
+  };
+  const githubLogin = async () => {
+    auth
+      .signInWithPopup(githubAuthProvider)
       .then(async (result) => {
         const { user } = result;
         const idTokenResult = await user.getIdToken();
@@ -101,7 +127,8 @@ const Login = ({ history }) => {
       </div>
       <div className='mb-1'>
         <Button
-          type='success'
+          type='default'
+          style={{ background: 'green', color: 'white' }}
           shape='round'
           icon={<MailOutlined />}
           onClick={handleSubmit}
@@ -150,6 +177,20 @@ const Login = ({ history }) => {
               disabled={!email || password.length < 6}
             >
               Login with Facebook
+            </Button>
+          </div>
+          <div className='mb-1'>
+            {' '}
+            <Button
+              type='dark'
+              shape='round'
+              icon={<GithubOutlined />}
+              onClick={githubLogin}
+              block
+              size='large'
+              disabled={!email || password.length < 6}
+            >
+              Login with Github
             </Button>
           </div>
         </div>
